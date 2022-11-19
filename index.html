@@ -1,0 +1,3436 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <style>
+        #map {
+            width: 1271px;
+            height: 813px;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/multi-style-layer.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/proj4.js"></script>
+        <script src="js/proj4leaflet.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="data/Ocoale_stat_1.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+        }
+        var crs = new L.Proj.CRS('EPSG:3844', '+proj=sterea +lat_0=46 +lon_0=25 +k=0.99975 +x_0=500000 +y_0=500000 +ellps=krass +units=m +no_defs', {
+            resolutions: [2800, 1400, 700, 350, 175, 84, 42, 21, 11.2, 5.6, 2.8, 1.4, 0.7, 0.35, 0.14, 0.07],
+        });
+        var map = L.map('map', {
+            crs: crs,
+            continuousWorld: false,
+            worldCopyJump: false, 
+            zoomControl:true, maxZoom:26, minZoom:1
+        }).fitBounds([[43.57041352481597,21.341453054639555],[45.628275396739184,25.80306295925233]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_GoogleRoad_0');
+        map.getPane('pane_GoogleRoad_0').style.zIndex = 400;
+        var layer_GoogleRoad_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleRoad_0',
+            opacity: 1.0,
+            attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
+            minZoom: 1,
+            maxZoom: 26,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_GoogleRoad_0;
+        map.addLayer(layer_GoogleRoad_0);
+        function pop_Ocoale_stat_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['an'] !== null ? autolinker.link(feature.properties['an'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">ocol</th>\
+                        <td>' + (feature.properties['ocol'] !== null ? autolinker.link(feature.properties['ocol'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Directie'] !== null ? autolinker.link(feature.properties['Directie'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Suprafata'] !== null ? autolinker.link(feature.properties['Suprafata'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#6dce17',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#2557cd',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#9c4de5',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#d7a57e',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ca5470',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e457a2',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#62e37c',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#5927ee',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#a856d4',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#d3d15c',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#cb821d',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#0dd2d5',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#81eac2',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ba3bdd',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e252d8',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e37dea',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#dfbb5e',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#7387ea',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#bedb65',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#31bbd7',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#2defbe',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#3375cb',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#31e7d2',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ebd247',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#de7d87',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#40b2e3',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#da3574',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#16ef62',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#8478e0',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#79c950',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#8285d9',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#6aa1cb',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#bcd215',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#8cda0f',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ea605b',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e34cb1',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#a986e0',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#db46bd',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#7ac97f',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#2ad11e',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#44c923',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ee4f30',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#7fe6b1',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#6dce17',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#2557cd',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#9c4de5',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#d7a57e',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ca5470',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e457a2',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#62e37c',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#5927ee',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#a856d4',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#d3d15c',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#cb821d',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#0dd2d5',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#81eac2',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ba3bdd',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e252d8',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e37dea',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#dfbb5e',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#7387ea',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#bedb65',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#31bbd7',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#2defbe',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#3375cb',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#31e7d2',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ebd247',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#de7d87',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#40b2e3',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#da3574',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#16ef62',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#8478e0',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#79c950',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#8285d9',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#6aa1cb',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#bcd215',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#8cda0f',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ea605b',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e34cb1',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#a986e0',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#db46bd',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#7ac97f',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#2ad11e',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#44c923',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ee4f30',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#7fe6b1',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#6dce17',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#2557cd',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#9c4de5',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#d7a57e',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ca5470',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e457a2',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#62e37c',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#5927ee',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#a856d4',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#d3d15c',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#cb821d',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#0dd2d5',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#81eac2',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ba3bdd',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e252d8',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e37dea',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#dfbb5e',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#7387ea',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#bedb65',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#31bbd7',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#2defbe',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#3375cb',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#31e7d2',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ebd247',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#de7d87',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#40b2e3',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#da3574',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#16ef62',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#8478e0',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#79c950',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#8285d9',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#6aa1cb',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#bcd215',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#8cda0f',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ea605b',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e34cb1',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#a986e0',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#db46bd',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#7ac97f',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#2ad11e',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#44c923',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ee4f30',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#7fe6b1',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#6dce17',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#2557cd',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#9c4de5',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#d7a57e',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ca5470',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e457a2',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#62e37c',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#5927ee',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#a856d4',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#d3d15c',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#cb821d',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#0dd2d5',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#81eac2',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ba3bdd',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e252d8',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e37dea',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#dfbb5e',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#7387ea',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#bedb65',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#31bbd7',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#2defbe',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#3375cb',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#31e7d2',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ebd247',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#de7d87',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#40b2e3',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#da3574',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#16ef62',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#8478e0',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#79c950',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#8285d9',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#6aa1cb',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#bcd215',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#8cda0f',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ea605b',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e34cb1',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#a986e0',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#db46bd',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#7ac97f',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#2ad11e',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#44c923',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ee4f30',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_1 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#7fe6b1',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 225
+        });
+        pattern_Ocoale_stat_1_1.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#6dce17',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#2557cd',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#9c4de5',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#d7a57e',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ca5470',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e457a2',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#62e37c',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#5927ee',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#a856d4',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#d3d15c',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#cb821d',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#0dd2d5',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#81eac2',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ba3bdd',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e252d8',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e37dea',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#dfbb5e',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#7387ea',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#bedb65',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#31bbd7',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#2defbe',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#3375cb',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#31e7d2',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ebd247',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#de7d87',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#40b2e3',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#da3574',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#16ef62',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#8478e0',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#79c950',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#8285d9',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#6aa1cb',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#bcd215',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#8cda0f',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ea605b',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#e34cb1',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#a986e0',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#db46bd',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#7ac97f',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#2ad11e',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#44c923',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#ee4f30',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        var pattern_Ocoale_stat_1_0 = new L.StripePattern({
+            weight: 0.3,
+            spaceWeight: 2.0,
+            color: '#7fe6b1',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_Ocoale_stat_1_0.addTo(map);
+        function style_Ocoale_stat_1_0(feature) {
+            switch(String(feature.properties['ocol'])) {
+                case 'Amaradia':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Babeni':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Baia_de_Arama':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Balcesti':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Bals':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Calafat':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Calimanesti':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Caracal':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Carbunesti':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Corabia':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Corcova':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Craiova':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Dabuleni':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Draganesti_Olt':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Dragasani':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Drobeta_Tr_Seve':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Filiasi':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Horezu':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Hurezani':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Motru':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Novaci':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Orsova':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Pades':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Perisor':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Pesteana':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Poiana_Mare':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Polovragi':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Rm_Valcea':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Romani':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Runcu':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Sadova':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Segarcea':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Simian':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Slatina':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Stoiceni':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Strehaia':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Tarnita':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Tg_Jiu':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Tismana':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Turceni':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Vanju_Mare':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Voineasa':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+                case 'Vulturesti':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_0,
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        function style_Ocoale_stat_1_1(feature) {
+            switch(String(feature.properties['ocol'])) {
+                case 'Amaradia':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Babeni':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Baia_de_Arama':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Balcesti':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Bals':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Calafat':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Calimanesti':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Caracal':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Carbunesti':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Corabia':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Corcova':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Craiova':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Dabuleni':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Draganesti_Olt':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Dragasani':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Drobeta_Tr_Seve':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Filiasi':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Horezu':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Hurezani':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Motru':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Novaci':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Orsova':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Pades':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Perisor':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Pesteana':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Poiana_Mare':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Polovragi':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Rm_Valcea':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Romani':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Runcu':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Sadova':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Segarcea':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Simian':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Slatina':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Stoiceni':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Strehaia':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Tarnita':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Tg_Jiu':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Tismana':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Turceni':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Vanju_Mare':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Voineasa':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+                case 'Vulturesti':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_Ocoale_stat_1_1,
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        function style_Ocoale_stat_1_2(feature) {
+            switch(String(feature.properties['ocol'])) {
+                case 'Amaradia':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(109,206,23,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Babeni':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(37,87,205,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Baia_de_Arama':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(156,77,229,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Balcesti':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(215,165,126,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Bals':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(202,84,112,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Calafat':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(228,87,162,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Calimanesti':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(98,227,124,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Caracal':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(89,39,238,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Carbunesti':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(168,86,212,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Corabia':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(211,209,92,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Corcova':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(203,130,29,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Craiova':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(13,210,213,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Dabuleni':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(129,234,194,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Draganesti_Olt':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(186,59,221,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Dragasani':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(226,82,216,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Drobeta_Tr_Seve':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(227,125,234,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Filiasi':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(223,187,94,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Horezu':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(115,135,234,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Hurezani':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(190,219,101,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Motru':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(49,187,215,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Novaci':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(45,239,190,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Orsova':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(51,117,203,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Pades':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(49,231,210,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Perisor':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(235,210,71,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Pesteana':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(222,125,135,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Poiana_Mare':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(64,178,227,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Polovragi':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(218,53,116,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Rm_Valcea':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(22,239,98,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Romani':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(132,120,224,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Runcu':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(121,201,80,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Sadova':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(130,133,217,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Segarcea':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(106,161,203,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Simian':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(188,210,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Slatina':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(140,218,15,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Stoiceni':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(234,96,91,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Strehaia':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(227,76,177,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Tarnita':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(169,134,224,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Tg_Jiu':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(219,70,189,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Tismana':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(122,201,127,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Turceni':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(42,209,30,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Vanju_Mare':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(68,201,35,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Voineasa':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(238,79,48,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Vulturesti':
+                    return {
+                pane: 'pane_Ocoale_stat_1',
+                opacity: 1,
+                color: 'rgba(127,230,177,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Ocoale_stat_1');
+        map.getPane('pane_Ocoale_stat_1').style.zIndex = 401;
+        map.getPane('pane_Ocoale_stat_1').style['mix-blend-mode'] = 'normal';
+        var layer_Ocoale_stat_1 = new L.geoJson.multiStyle(json_Ocoale_stat_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Ocoale_stat_1',
+            layerName: 'layer_Ocoale_stat_1',
+            pane: 'pane_Ocoale_stat_1',
+            onEachFeature: pop_Ocoale_stat_1,
+            styles: [style_Ocoale_stat_1_0,style_Ocoale_stat_1_1,style_Ocoale_stat_1_2,]
+        });
+        bounds_group.addLayer(layer_Ocoale_stat_1);
+        map.addLayer(layer_Ocoale_stat_1);
+        setBounds();
+        var i = 0;
+        layer_Ocoale_stat_1.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['ocol'] !== null?String('<div style="color: #323232; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['ocol']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Ocoale_stat_1'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        map.addControl(new L.Control.Search({
+            layer: layer_Ocoale_stat_1,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'ocol'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        resetLabels([layer_Ocoale_stat_1]);
+        map.on("zoomend", function(){
+            resetLabels([layer_Ocoale_stat_1]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_Ocoale_stat_1]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_Ocoale_stat_1]);
+        });
+        </script>
+    </body>
+</html>
